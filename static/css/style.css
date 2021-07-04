@@ -412,6 +412,11 @@ input[type="text"] {
     display: block;
   }
 
+  .box-title:after {
+    content: "\a";
+    white-space: pre;
+  }
+
   #computer-playlist {
     display: none;
   }

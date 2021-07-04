@@ -110,7 +110,6 @@ def predict():
             tracks.extend(playlist_info['tracks']['items'])
         trackid = []
         for i in range(len(tracks)):
-            print(tracks[i].keys())
             if input_type == "playlist":
                 trackid.append(tracks[i]['track']['id'])
             else:
@@ -122,7 +121,6 @@ def predict():
         genre_data = get_genre_stats(clean)
         mood_data = get_mood_stats(clean)
         tg, tm, emojis = get_chart_data(genre_data, mood_data)
-        print(tg, tm, emojis)
         return render_template("playlist.html", playlist=embed, tg=tg, tm=tm, emojis=emojis)
     else:
         return render_template('homepage.html', invalid="true")
