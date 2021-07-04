@@ -1,4 +1,5 @@
 import json
+import os
 from flask import Flask, flash, render_template, redirect, request, session, make_response, session, redirect
 import requests
 from urllib.parse import quote
@@ -17,12 +18,12 @@ import pandas as pd
 
 app = Flask(__name__)
 
-app.secret_key = "lol"
+app.secret_key = os.environ.get('APP_SECRET_KEY')
 
-CLIENT_ID = "72305579d392453bad62da72bee5b41d"
-CLIENT_SECRET = "84ed762a60d14e7bb8c3f1517447f13e"
+CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 PORT = 8080
-REDIRECT_URI = "http://127.0.0.1:8080/callback/auth"
+REDIRECT_URI = "http://piper-ai.herokuapp.com/callback/auth"
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read,user-read-recently-played'
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
