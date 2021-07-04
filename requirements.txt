@@ -2,6 +2,6 @@ requests==2.25.1
 Flask==2.0.1
 joblib==1.0.1
 numpy==1.21.0
-pandas==1.3.0
+pandas==1.3.0rc1
 scikit_learn==0.24.2
 spotipy==2.18.0
