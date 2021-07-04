@@ -172,6 +172,10 @@ form label {
   margin-bottom: 40px;
 }
 
+.break-emoji {
+  display: none;
+}
+
 .main--img {
   flex: 1;
 }
@@ -412,9 +416,8 @@ input[type="text"] {
     display: block;
   }
 
-  .box-title:after {
-    content: "\a";
-    white-space: pre;
+  .break-emoji {
+    display: block;
   }
 
   #computer-playlist {
