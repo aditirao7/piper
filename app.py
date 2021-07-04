@@ -19,11 +19,10 @@ import pandas as pd
 app = Flask(__name__)
 
 app.secret_key = os.environ.get('APP_SECRET_KEY')
-
 CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 PORT = 8080
-REDIRECT_URI = "https://piper-ai.herokuapp.com/callback/auth"
+REDIRECT_URI = "http://127.0.0.1:8080/callback/auth"
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read,user-read-recently-played'
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
@@ -93,17 +92,29 @@ def predict():
         CLIENT_ID, CLIENT_SECRET)
     sp = spotipy.Spotify(auth_manager=token)
     inputstr = request.form['getplaylist']
-    if inputstr.startswith("https://open.spotify.com/playlist/"):
-        id = inputstr[34:56]
-        embed = "https://open.spotify.com/embed/playlist/" + id
-        playlist_info = sp.playlist(id)
+    if inputstr.startswith("https://open.spotify.com/playlist/") or inputstr.startswith("https://open.spotify.com/album/"):
+        id = ""
+        input_type = inputstr[25:33]
+        embed = ""
+        if input_type == "playlist":
+            id = inputstr[34:56]
+            embed = "https://open.spotify.com/embed/playlist/" + id
+            playlist_info = sp.playlist(id)
+        else:
+            id = inputstr[31:53]
+            embed = "https://open.spotify.com/embed/album/" + id
+            playlist_info = sp.album(id)
         tracks = playlist_info['tracks']['items']
         while playlist_info['tracks']['next']:
             playlist_info['tracks'] = sp.next(playlist_info['tracks'])
             tracks.extend(playlist_info['tracks']['items'])
         trackid = []
         for i in range(len(tracks)):
-            trackid.append(tracks[i]['track']['id'])
+            print(tracks[i].keys())
+            if input_type == "playlist":
+                trackid.append(tracks[i]['track']['id'])
+            else:
+                trackid.append(tracks[i]['id'])
         features = []
         for i in range(0, len(trackid), 100):
             features += sp.audio_features(trackid[i:i+100])
