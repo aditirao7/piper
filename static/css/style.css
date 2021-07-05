@@ -98,6 +98,8 @@ header img {
 }
 
 .main--content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin-top: 40px;
   margin-bottom: 40px;
@@ -417,6 +419,10 @@ input[type="text"] {
     z-index: -1;
   }
 
+  input[type="text"] {
+    color: black;
+  }
+
   .hello,
   .listen {
     margin-left: 10px;
@@ -437,7 +443,12 @@ input[type="text"] {
   header {
     display: flex;
     align-items: center;
+    position: fixed;
     background-color: #333;
+  }
+
+  form {
+    z-index: 500;
   }
 
   .navigation--button,
