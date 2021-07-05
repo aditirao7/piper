@@ -358,7 +358,7 @@ input[type="text"] {
 
   transform: translateX(-100%);
 
-  transition: transform 300ms 100ms ease-in-out;
+  transition: transform 300ms ease-in-out;
 }
 
 .mobile-navigation__open {
@@ -414,11 +414,6 @@ input[type="text"] {
     flex-direction: column;
     width: 92vw;
     padding-top: 80px;
-    z-index: -1;
-  }
-
-  input[type="text"] {
-    color: black;
   }
 
   .hello,
