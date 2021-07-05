@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1,
-  maximum-scale=1"
+      content="width=device-width, initial-scale=1, maximum-scale=12.0, minimum-scale=1, user-scalable=yes"
     />
 
     <link rel="icon" href="../static/img/piper-favicon.png" />
@@ -49,17 +48,21 @@
       <a href="" class="mobile-navigation--item mobile-navigation--item__active"
         >Home</a
       >
+      <a href="{{ url_for('lyrics')}}" class="mobile-navigation--item"
+        >Lyrics</a
+      >
       <a href="{{ url_for('contact')}}" class="mobile-navigation--item"
         >About</a
       >
     </div>
 
     <div id="container">
-      <header>
+      <header id="header">
         <img src="../static/img/Piper..png" alt="" class="logo" />
 
         <nav class="navigation">
           <a href="" class="navigation--item navigation--item__active">Home</a>
+          <a href="{{ url_for('lyrics')}}" class="navigation--item">Lyrics</a>
           <a href="{{ url_for('contact')}}" class="navigation--item">About</a>
         </nav>
 
@@ -83,16 +86,17 @@
 
           <p class="description">
             Piper uses your Spotify data to predict your mood, genre preference
-            and analyses lyrics to categorise the words into different emotions.
+            and analyzes lyrics to categorise the words into different emotions.
           </p>
 
           <form class="form" method="POST" action="{{url_for('predict')}}">
             <label class="form-text" for="getplaylist"
-              >Enter a playlist/album link or click on Get Started</label
+              >Enter a playlist/album link to predict genre and mood</label
             ><br />
             <input
               type="text"
               id="getplaylist"
+              class="inputfields"
               name="getplaylist"
               autocomplete="off"
             />
@@ -128,13 +132,20 @@
     </div>
 
     <script>
-      function toggleMobileNavigation() {
-        var element = document.getElementById("mobile-navigation");
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
 
+      async function toggleMobileNavigation() {
+        var element = document.getElementById("mobile-navigation");
+        var head = document.getElementById("header");
         if (element.classList.contains("mobile-navigation__open")) {
           element.classList.remove("mobile-navigation__open");
+          await sleep(280);
+          head.style.display = "flex";
         } else {
           element.classList.add("mobile-navigation__open");
+          head.style.display = "none";
         }
       }
     </script>

@@ -49,7 +49,9 @@
       <a href="{{ url_for('homepage')}}" class="mobile-navigation--item"
         >Home</a
       >
-      <a href="{{ url_for('lyrics')}}" class="mobile-navigation--item">Lyrics</a>
+      <a href="" class="mobile-navigation--item mobile-navigation--item__active"
+        >Lyrics</a
+      >
       <a href="{{ url_for('contact')}}" class="mobile-navigation--item"
         >About</a
       >
@@ -61,7 +63,9 @@
 
         <nav class="navigation">
           <a href="{{ url_for('homepage')}}" class="navigation--item">Home</a>
-          <a href="{{ url_for('lyrics')}}" class="navigation--item">Lyrics</a>
+          <a href="" class="navigation--item navigation--item__active"
+            >Lyrics</a
+          >
           <a href="{{ url_for('contact')}}" class="navigation--item">About</a>
         </nav>
 
@@ -77,56 +81,53 @@
       </header>
 
       <main>
-        <h1 class="hello">Hi!</h1>
-        <h1 class="listen">Here's your playlist!</h1>
-        <div class="Playlist" id="entered-playlist">
-          <iframe
-            src="{{playlist}}"
-            frameborder="0"
-            allowtransparency="true"
-            allow="encrypted-media"
-          ></iframe>
-        </div>
-        <div class="playlist_charts">
-          <h1>Your playlist analysis <br class="break-emoji">
-          [&#{{emojis[0]}}; &#{{emojis[1]}};]</h1>
-          <div class="playlist_chart_container">
-            <div>
-              <canvas id="genre_chart"></canvas>
-            </div>
-            <div>
-              <canvas id="mood_chart"></canvas>
-            </div>
-          </div>
-        </div>
+        <form class="song-form" method="POST" action="{{url_for('lyrics')}}">
+          <label class="form-text" for="getsong">Enter the song name</label
+          ><br />
+          <input
+            type="text"
+            id="getsong"
+            class="inputfields"
+            autocomplete="off"
+          /><br />
+          <label class="form-text" for="getartist">Enter the artist name</label
+          ><br />
+          <input
+            type="text"
+            id="getartist"
+            class="inputfields"
+            autocomplete="off"
+          /><br />
+          <input type="submit" value="Analyze" class="submit--button" />
+        </form>
       </main>
 
-        <footer>
-            <div class="socials">
-            <a
-                href="https://linkedin.com/in/aditirao72"
-                target="_blank"
-                class="socials--item"
-            >
-                <i class="fa fa-linkedin"></i>
-            </a>
-            <a
-                href="https://github.com/aditirao7"
-                target="_blank"
-                class="socials--item"
-            >
-                <i class="fa fa-github"></i>
-            </a>
-            </div>
+      <footer>
+        <div class="socials">
+          <a
+            href="https://linkedin.com/in/aditirao72"
+            target="_blank"
+            class="socials--item"
+          >
+            <i class="fa fa-linkedin"></i>
+          </a>
+          <a
+            href="https://github.com/aditirao7"
+            target="_blank"
+            class="socials--item"
+          >
+            <i class="fa fa-github"></i>
+          </a>
+        </div>
 
-            <span>Aditi Rao</span>
-        </footer>
+        <span>Aditi Rao</span>
+      </footer>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
       function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => setTimeout(resolve, ms));
       }
 
       async function toggleMobileNavigation() {
@@ -134,13 +135,11 @@
         var head = document.getElementById("header");
         if (element.classList.contains("mobile-navigation__open")) {
           element.classList.remove("mobile-navigation__open");
-          drawCharts(tgl,tgd,"Genre Chart","genre_chart",genre_color);
-          drawCharts(tml, tmd, "Mood Chart", "mood_chart", mood_color);
-          await sleep(200);
-          head.style.display = 'flex';
+          await sleep(280);
+          head.style.display = "flex";
         } else {
           element.classList.add("mobile-navigation__open");
-          head.style.display = 'none';
+          head.style.display = "none";
         }
       }
 
@@ -150,7 +149,6 @@
 
         const options = {
           responsive: true,
-          animation: 300,
           maintainAspectRatio: false,
           title: {
             display: true,
@@ -195,13 +193,6 @@
         "#DC6DCE",
         "#DC6788",
       ];
-      const mood_color = ["#39BEB9", "#BD575F", "#F17B37", "#F1AF38"];
-      tgl = {{tg[1]|tojson}};
-      tgd = {{tg[0]|tojson}};
-      tml = {{tm[1]|tojson}};
-      tmd = {{tm[0]|tojson}};
-      drawCharts(tgl, tgd, "Genre Chart", "genre_chart", genre_color);;
-      drawCharts(tml, tmd, "Mood Chart", "mood_chart", mood_color);
     </script>
   </body>
 </html>

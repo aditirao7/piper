@@ -118,7 +118,7 @@ header img {
   padding: 0;
 }
 
-#getplaylist {
+.inputfields {
   width: 90%;
   border-radius: 10px;
   margin-bottom: 5px;
@@ -358,7 +358,7 @@ input[type="text"] {
 
   transform: translateX(-100%);
 
-  transition: transform 300ms ease-in-out;
+  transition: transform 300ms 100ms ease-in-out;
 }
 
 .mobile-navigation__open {
@@ -399,11 +399,60 @@ input[type="text"] {
   color: white;
 }
 
+.song-form {
+  margin-top: 40px;
+}
+
+#getsong,
+#getartist {
+  width: 50%;
+}
+
 @media only screen and (max-width: 680px) {
   main {
     display: flex;
     flex-direction: column;
     width: 92vw;
+    padding-top: 80px;
+    z-index: -1;
+  }
+
+  input[type="text"] {
+    color: black;
+  }
+
+  .hello,
+  .listen {
+    margin-left: 10px;
+  }
+
+  .home--main {
+    padding-top: 75px;
+  }
+
+  .services--main {
+    padding-top: 110px;
+  }
+
+  #container {
+    padding-top: 0px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    background-color: #333;
+  }
+
+  .navigation--button,
+  .menu--button {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .playlist_chart_container {
+    height: 502.78px;
   }
 
   .Playlist iframe {
@@ -414,6 +463,8 @@ input[type="text"] {
 
   #mobile-playlist {
     display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .break-emoji {
@@ -428,7 +479,7 @@ input[type="text"] {
     margin: 0px 20px 10px 10px;
     padding: 0px;
     width: 95%;
-    height: 90px;
+    height: 80px;
     float: left;
   }
 
@@ -469,6 +520,7 @@ input[type="text"] {
 
   .mobile-navigation {
     display: block;
+    z-index: 1;
   }
 
   .menu--button {

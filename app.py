@@ -46,6 +46,11 @@ def contact():
     return render_template('contact.html')
 
 
+@app.route('/lyrics')
+def lyrics():
+    return render_template('lyrics.html')
+
+
 @app.route("/auth")
 def auth():
     auth_url = f'{API_BASE}/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}&show_dialog={SHOW_DIALOG}'
