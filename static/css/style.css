@@ -414,6 +414,7 @@ input[type="text"] {
     flex-direction: column;
     width: 92vw;
     padding-top: 80px;
+    z-index: -1;
   }
 
   .hello,
