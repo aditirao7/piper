@@ -416,6 +416,10 @@ input[type="text"] {
     flex-direction: column;
     width: 92vw;
     padding-top: 80px;
+  }
+
+  .playlist--main,
+  .services--main {
     z-index: -1;
   }
 
@@ -445,10 +449,7 @@ input[type="text"] {
     align-items: center;
     position: fixed;
     background-color: #333;
-  }
-
-  form {
-    z-index: 500;
+    align-items: center;
   }
 
   .navigation--button,
@@ -531,6 +532,7 @@ input[type="text"] {
 
   .menu--button {
     display: block;
+    margin-left: 10px;
   }
 
   header,
