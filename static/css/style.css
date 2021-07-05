@@ -437,7 +437,6 @@ input[type="text"] {
   header {
     display: flex;
     align-items: center;
-    position: fixed;
     background-color: #333;
   }
 
