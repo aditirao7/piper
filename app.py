@@ -1,3 +1,8 @@
+import string
+import re
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 import json
 import os
 from flask import Flask, flash, render_template, redirect, request, session, make_response, session, redirect
@@ -17,11 +22,9 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import lyricsgenius as lg
 import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-import re
-import string
+nltk.download('word_tokenize')
+nltk.download('stopwords')
+nltk.download('WordNetLemmatizer')
 
 app = Flask(__name__)
 
