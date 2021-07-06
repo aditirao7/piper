@@ -39,7 +39,6 @@ API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
 
 l = WordNetLemmatizer()
-words = set(nltk.corpus.words.words())
 
 with open('genre.pkl', 'rb') as g:
     genre_data = joblib.load(g)
