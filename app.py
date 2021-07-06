@@ -15,17 +15,28 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
+import lyricsgenius as lg
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import re
+import string
 
 app = Flask(__name__)
 
 app.secret_key = os.environ.get('APP_SECRET_KEY')
 CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
+GENIUS_KEY = os.environ.get('GENIUS_KEY')
 PORT = 8080
 REDIRECT_URI = "https://piper-ai.herokuapp.com/callback/auth"
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read,user-read-recently-played'
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
+
+l = WordNetLemmatizer()
+words = set(nltk.corpus.words.words())
 
 with open('genre.pkl', 'rb') as g:
     genre_data = joblib.load(g)
@@ -34,6 +45,22 @@ genre_model = genre_data["model"]
 with open('mood.pkl', 'rb') as m:
     mood_data = joblib.load(m)
 mood_model = mood_data["model"]
+
+dbfile = open('emotions', 'rb')
+emotions = pickle.load(dbfile)
+dbfile.close()
+
+dbfile = open('valence', 'rb')
+valence = pickle.load(dbfile)
+dbfile.close()
+
+dbfile = open('arousal', 'rb')
+arousal = pickle.load(dbfile)
+dbfile.close()
+
+dbfile = open('dominance', 'rb')
+dominance = pickle.load(dbfile)
+dbfile.close()
 
 
 @app.route('/')
@@ -71,7 +98,24 @@ def callback():
     })
     res_body = res.json()
     session["toke"] = res_body.get("access_token")
-    return redirect("/services")
+    return redirect("/login")
+
+
+@app.route("/login")
+def login():
+    sp = spotipy.Spotify(auth=session['toke'])
+    user = sp.current_user()
+    return render_template("login.html", user=user['display_name'])
+
+
+@app.route("/merge")
+def merge():
+    return render_template("merge.html")
+
+
+@app.route("/discover")
+def discover():
+    return render_template("discover.html")
 
 
 @app.route("/services")
@@ -129,6 +173,54 @@ def predict():
         return render_template("playlist.html", playlist=embed, tg=tg, tm=tm, emojis=emojis)
     else:
         return render_template('homepage.html', invalid="true")
+
+
+@app.route("/lyrical_analysis", methods=["POST"])
+def lyrical_analysis():
+    token = SpotifyClientCredentials(
+        CLIENT_ID, CLIENT_SECRET)
+    sp = spotipy.Spotify(auth_manager=token)
+    song = request.form['getsong']
+    artist = request.form['getartist']
+    track = sp.search(q='artist:' + artist + ' track:' +
+                      song, type='track', limit=1)
+    if len(track['tracks']['items']) != 0:
+        song = track['tracks']['items'][0]['name']
+        artist = track['tracks']['items'][0]['artists'][0]['name']
+        genius = lg.Genius(GENIUS_KEY)
+        genius_track = genius.search_song(song, artist)
+        if genius_track is not None:
+            lyrics = [genius_track.lyrics]
+            cleaned = [(re.sub(r'\d+', '', re.sub("[\(\[].*?[\)\]]", "", line.replace('\n', ' '))).lower().translate(str.maketrans(
+                string.punctuation, ' '*len(string.punctuation)))).replace('\u2005', ' ') for line in lyrics if not line.startswith('advertisement')]
+
+            # Initilising overall mood of given text
+            mood = [0]*9
+            emotion_list = ['anger', 'disgust',
+                            'fear', 'joy', 'sadness', 'surprise']
+
+            # Counting value of each emotion overall from tokens
+            count = 0
+            count1 = 0
+            for c in cleaned:
+                for w in c.split():
+                    if w not in stopwords.words('english'):
+                        pos = [l.lemmatize(w, pos="v"), l.lemmatize(w, pos="a"), l.lemmatize(
+                            w, pos="s"), l.lemmatize(w, pos="r"), l.lemmatize(w, pos="n")]
+                        for p in pos:
+                            if p in emotions.keys():
+                                mood[0:6] = [emotions[p][i] + mood[j]
+                                             for (i, j) in zip([0, 2, 3, 4, 7, 8], range(6))][:]
+                                count1 += 1
+                            if p in valence.keys() and len(valence[p]) == 1:
+                                mood[6] += valence[p][0]
+                                mood[7] += arousal[p][0]
+                                mood[8] += dominance[p][0]
+                                count += 1
+                                break
+
+            print(mood, count, count1)
+    return render_template("lyrics.html")
 
 
 def get_chart_data(genre, mood):

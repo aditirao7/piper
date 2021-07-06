@@ -75,18 +75,21 @@
           </button>
         </div>
 
-        <a class="navigation--button" href="{{ url_for('auth')}}"
-          >Get Started</a
-        >
+        <a class="navigation--button" href="{{ url_for('auth')}}">Login</a>
       </header>
 
       <main>
-        <form class="song-form" method="POST" action="{{url_for('lyrics')}}">
+        <form
+          class="song-form"
+          method="POST"
+          action="{{url_for('lyrical_analysis')}}"
+        >
           <label class="form-text" for="getsong">Enter the song name</label
           ><br />
           <input
             type="text"
             id="getsong"
+            name="getsong"
             class="inputfields"
             autocomplete="off"
           /><br />
@@ -95,6 +98,7 @@
           <input
             type="text"
             id="getartist"
+            name="getartist"
             class="inputfields"
             autocomplete="off"
           /><br />

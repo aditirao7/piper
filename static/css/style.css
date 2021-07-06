@@ -105,10 +105,6 @@ header img {
   margin-bottom: 40px;
 }
 
-.main--content h1 {
-  color: #7499f1;
-}
-
 .main--content p {
   color: #eaf3fa;
 }
@@ -118,6 +114,7 @@ header img {
   font-weight: 500;
   margin: 0;
   padding: 0;
+  color: #7499f1;
 }
 
 .inputfields {
@@ -410,6 +407,93 @@ input[type="text"] {
   width: 50%;
 }
 
+.login-image {
+  width: 50%;
+  margin: auto;
+}
+
+#login-image {
+  width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.login--main h1 {
+  margin-left: 20px;
+  width: 50%;
+  margin-top: 50px;
+}
+
+.login--main {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.login--content {
+  display: flex;
+}
+
+.links {
+  float: right;
+  width: 50%;
+}
+
+.services-link,
+.discover-link,
+.merge-link {
+  width: 80%;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  display: flex;
+  align-items: center;
+}
+
+.services-link a,
+.merge-link a,
+.discover-link a {
+  text-decoration: none;
+  font-weight: 500;
+  margin: auto;
+}
+
+.services-link img,
+.merge-link img,
+.discover-link img {
+  width: 20%;
+  height: 20%;
+  border-radius: 100px;
+  margin-right: 30px;
+  margin-left: 10px;
+}
+
+.services-link img {
+  border-radius: 20px;
+}
+
+.links a:hover {
+  color: #333;
+}
+
+.services-link {
+  background-color: #f47556;
+  float: left;
+}
+
+.discover-link {
+  background-color: #f89746;
+  float: left;
+}
+
+.merge-link {
+  float: right;
+  background-color: #446eb7;
+}
+
 @media only screen and (max-width: 680px) {
   main {
     display: flex;
@@ -418,8 +502,14 @@ input[type="text"] {
     padding-top: 80px;
   }
 
-  .playlist--main,
-  .services--main {
+  #getsong,
+  #getartist {
+    width: 95%;
+  }
+
+  .top50,
+  .recent50,
+  .playlist_charts {
     z-index: -1;
   }
 
@@ -550,5 +640,40 @@ input[type="text"] {
     height: 70%;
     align-self: center;
     margin-bottom: 10px;
+  }
+
+  .login-image {
+    width: 100%;
+    align-self: center;
+  }
+
+  .login--main h1 {
+    margin: 30px 20px;
+    width: 90%;
+  }
+
+  .login--content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .links {
+    width: 100%;
+  }
+
+  .services-link,
+  .discover-link,
+  .merge-link {
+    width: 95%;
+    float: none;
+    text-decoration: none;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+
+  .services-link {
+    background-color: #f47556;
+    margin-top: 50px;
   }
 }
