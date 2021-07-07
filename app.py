@@ -33,7 +33,7 @@ CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 GENIUS_KEY = os.environ.get('GENIUS_KEY')
 PORT = 8080
-REDIRECT_URI = "https://piper-ai.herokuapp.com/callback/auth"
+REDIRECT_URI = "http://127.0.0.1:8080/callback/auth"
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read,user-read-recently-played'
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
@@ -110,9 +110,42 @@ def login():
     return render_template("login.html", user=user['display_name'])
 
 
-@app.route("/merge")
+@app.route("/merge", methods=["POST", "GET"])
 def merge():
-    return render_template("merge.html")
+    playlists = list(request.form.to_dict().values())
+    print(playlists)
+    sp = spotipy.Spotify(auth=session['toke'])
+    userid = sp.current_user()['id']
+    try:
+        if len(playlists) == 0:
+            return render_template("merge.html", flash="true")
+        elif len(playlists) >= 3 and playlists[0] == '' and playlists[1] == '' and playlists[2] == '':
+            return render_template("merge.html", flash="true", playlist="")
+        elif len(playlists) >= 3:
+            trackid = []
+            count = 0
+            for p in playlists[1:]:
+                if p.startswith("https://open.spotify.com/playlist/"):
+                    count += 1
+                    playlist_info = sp.playlist(p[34:56])
+                    tracks = playlist_info['tracks']['items']
+                    while playlist_info['tracks']['next']:
+                        playlist_info['tracks'] = sp.next(
+                            playlist_info['tracks'])
+                        tracks.extend(playlist_info['tracks']['items'])
+                    for i in range(len(tracks)):
+                        trackid.append(tracks[i]['track']['id'])
+            if count >= 2:
+                new_playlist_id = sp.user_playlist_create(
+                    userid, playlists[0])['id']
+                trackid = list(set(trackid))
+                for i in range(0, len(trackid), 100):
+                    sp.user_playlist_add_tracks(
+                        user=userid, playlist_id=new_playlist_id, tracks=trackid[i:i+100])
+                return render_template("merge.html", flash="Success!", playlist="https://open.spotify.com/embed/playlist/"+new_playlist_id)
+        return render_template("merge.html", flash="Enter atleast 2 valid playlist links!", playlist="")
+    except:
+        return redirect('/auth')
 
 
 @app.route("/discover")

@@ -25,7 +25,45 @@
       href="{{ url_for('static', filename= 'css/style.css') }}"
     />
 
-    <title>About.</title>
+    <title>Merge</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      var fieldNum = 0;
+      const color = ["#39BEB9", "#8C75AF", "#F17B37", "#BD575F"];
+      $(function () {
+        var inv = {{flash|tojson}};
+        if(inv.localeCompare('true')!=0) {
+            $("#message span").text(inv);
+            if(inv.localeCompare('Success!')==0)
+            {
+                $("#message i").attr("class", "fa fa-check");
+                $("#message").attr("class", "success");
+                $(".new-merged-playlist").attr("style", "display:block");
+                $("#merge-music").attr("style", "display:none");
+            }
+            else
+            {
+                $("#message i").attr("class", "fa fa-times-circle");
+                $("#message").attr("class", "error");
+            }
+            $("#message").attr("style", "display:block");
+        }
+        $(".add").click(function () {
+          $(".dummy input").attr("name", "playlist-" + (3 + fieldNum));
+          $(".dummy label").text("Playlist " + (3 + fieldNum));
+          $(".dummy > p").css("background-color", (color[(3+fieldNum)%4]));
+          $(".dummy > p").clone(true).insertBefore(".add-button");
+          fieldNum++;
+          return false;
+        });
+
+        $(".remove").click(function () {
+          $(this).parent().remove();
+          fieldNum--;
+        });
+      });
+    </script>
   </head>
   <body>
     <div class="mobile-navigation" id="mobile-navigation">
@@ -67,7 +105,52 @@
         </div>
       </header>
 
-      <main></main>
+      <main class="merge--main">
+        <div class="dummy" style="display: none">
+          <p class="merge-playlist">
+            <label>Playlist 1</label><br />
+            <input type="text" name="playlist-1" autocomplete="off" />
+            <span class="remove"><i class="fa fa-close"></i></span>
+          </p>
+        </div>
+        <div id="message" style="display: none">
+          <i class="fa fa-check"></i>
+          <span>Message</span>
+        </div>
+        <div class="content">
+          <div class="new-merged-playlist" style="display: none">
+            <iframe
+              src="{{playlist}}"
+              frameborder="0"
+              allowtransparency="true"
+              allow="encrypted-media"
+            ></iframe>
+          </div>
+          <form method="POST" action="{{url_for('merge')}}">
+            <h1>Merge Playlists</h1>
+            <p
+              class="merge-playlist"
+              id="name-playlist"
+              style="background-color: #39beb9"
+            >
+              <label>Name of Merged Playlist</label>
+              <input type="text" name="new-playlist-name" autocomplete="off" />
+            </p>
+            <p class="merge-playlist" style="background-color: #8c75af">
+              <label>Playlist 1</label><br />
+              <input type="text" name="playlist-1" autocomplete="off" />
+            </p>
+            <p class="merge-playlist" style="background-color: #f17b37">
+              <label>Playlist 2</label><br />
+              <input type="text" name="playlist-2" autocomplete="off" />
+            </p>
+            <p class="add-button">
+              <span class="add"><i class="fa fa-plus"></i></span>
+            </p>
+            <input type="submit" value="Merge" class="submit--button" />
+          </form>
+        </div>
+      </main>
 
       <footer>
         <div class="socials">
