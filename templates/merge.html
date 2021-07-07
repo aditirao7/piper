@@ -30,7 +30,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
       var fieldNum = 0;
-      const color = ["#39BEB9", "#8C75AF", "#F17B37", "#BD575F"];
+      const color = ["#F17B37", "#BD575F","#8C75AF","#39BEB9"];
       $(function () {
         var inv = {{flash|tojson}};
         if(inv.localeCompare('true')!=0) {
@@ -131,16 +131,16 @@
             <p
               class="merge-playlist"
               id="name-playlist"
-              style="background-color: #39beb9"
+              style="background-color: #f17b37"
             >
               <label>Name of Merged Playlist</label>
               <input type="text" name="new-playlist-name" autocomplete="off" />
             </p>
-            <p class="merge-playlist" style="background-color: #8c75af">
+            <p class="merge-playlist" style="background-color: #bd575f">
               <label>Playlist 1</label><br />
               <input type="text" name="playlist-1" autocomplete="off" />
             </p>
-            <p class="merge-playlist" style="background-color: #f17b37">
+            <p class="merge-playlist" style="background-color: #8c75af">
               <label>Playlist 2</label><br />
               <input type="text" name="playlist-2" autocomplete="off" />
             </p>
