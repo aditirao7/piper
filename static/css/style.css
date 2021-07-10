@@ -213,6 +213,7 @@ footer span {
 
 .services--main {
   padding: 15px;
+  height: 80%;
 }
 
 .Analyse {
@@ -405,7 +406,7 @@ input[type="text"] {
 
 #getsong,
 #getartist {
-  width: 50%;
+  width: 95%;
 }
 
 .login-image {
@@ -616,6 +617,97 @@ input[type="text"] {
   font-size: 18px;
 }
 
+.merge-playlist > * {
+  margin-left: 10px;
+}
+
+.song-form {
+  width: 55%;
+  margin: 0;
+  margin-top: 50px;
+}
+
+.discover {
+  display: flex;
+  height: 70%;
+}
+
+.discover-playlist {
+  margin-top: 30px;
+  margin-right: 40px;
+  margin-left: 10px;
+  width: 50%;
+  color: #7499f1;
+  font-size: 20px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.discover-playlist iframe {
+  width: 100%;
+  height: 600px;
+  margin-top: 10px;
+}
+
+.discover-artists {
+  margin-top: 30px;
+  margin-left: 20px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  color: #7499f1;
+  font-size: 20px;
+  font-weight: 600;
+  justify-content: space-between;
+}
+
+.discover-artists iframe {
+  height: 80px;
+}
+
+.discover--main {
+  height: 80vh;
+}
+
+.lyrics_chart_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lyrics_chart_container div {
+  width: 45%;
+  height: 90%;
+}
+
+.lyrics_charts {
+  width: 100%;
+  height: 65%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  color: white;
+  border: 3px solid white;
+  border-radius: 10px;
+  margin-top: 30px;
+  padding: 5px 36px;
+}
+
+#carousel {
+  margin-top: 40px;
+}
+
+#carousel img {
+  background-color: #e8e1d2;
+  padding: 20px;
+  width: 150px;
+  height: 150px;
+}
+
 @media only screen and (max-width: 680px) {
   main {
     display: flex;
@@ -624,9 +716,67 @@ input[type="text"] {
     padding-top: 80px;
   }
 
-  #getsong,
-  #getartist {
+  .lyrics_charts {
+    padding: 10px;
+  }
+
+  .lyrics_chart_container {
+    flex-direction: column;
+    height: 502.78px;
+    padding: 0px;
+    width: 100%;
+  }
+
+  .lyrics--main {
+    height: fit-content;
+  }
+
+  .lyrics_chart_container div {
+    height: 45%;
+    width: 90%;
+  }
+
+  .discover--main {
+    height: fit-content;
+    padding-top: 50px;
+  }
+
+  .song-form {
     width: 95%;
+  }
+
+  .discover-playlist {
+    margin-top: 30px;
+    width: 100%;
+    margin: 0px;
+    margin-top: 30px;
+    height: 80px;
+    color: #7499f1;
+    font-weight: 400;
+    overflow: visible;
+  }
+
+  .discover-playlist iframe {
+    height: 100%;
+  }
+
+  .discover-artists {
+    width: 100%;
+  }
+
+  .first-artist {
+    margin-top: 20px;
+  }
+
+  .discover {
+    flex-direction: column;
+  }
+
+  .discover-artists {
+    margin-top: 80px;
+    margin-left: 0px;
+    color: #7499f1;
+    font-weight: 400;
   }
 
   .top50,
@@ -662,6 +812,7 @@ input[type="text"] {
     position: fixed;
     background-color: #333;
     align-items: center;
+    z-index: 0;
   }
 
   .navigation--button,

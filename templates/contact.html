@@ -26,6 +26,9 @@
     />
 
     <title>About.</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="../static/css/jquery.flipster.min.css" />
+    <script src="../static/js/jquery.flipster.min.js"></script>
   </head>
   <body>
     <div class="mobile-navigation" id="mobile-navigation">
@@ -70,7 +73,7 @@
       </header>
 
       <main>
-        <p style="margin-top: 50px">
+        <p style="font-size: 20px; margin-top: 50px">
           Piper uses Machine Learning to classify songs into different genres
           and predict the mood of the song. The datasets for training the models
           were obtained using the Spotify API. The machine learning models
@@ -80,24 +83,67 @@
           <a href="https://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm"
             >NRC Emotion Lexicon</a
           >
-          to extract the overall valence and emotion of the song.
+          to extract the overall valence and emotion of the song. After login
+          you can choose to analyse your tracks, merge multiple playlists and/or
+          albums and get a curated playlist of recommended songs.
         </p>
         <p style="color: #7499f1; font-size: 20px">
           Piper was built using the following languages, packages, frameworks
           and APIs:
         </p>
         <ul>
-          <li>HTML, CSS, JavaScript, JQuery, Python</li>
-          <li>Flask</li>
           <li>Spotify API</li>
           <li>Genius API</li>
+          <li>HTML, CSS, JavaScript, JQuery, Python</li>
+          <li>Flask</li>
           <li>NLTK</li>
           <li>Numpy, Pandas and Scikit Learn</li>
           <li>Spotipy (A python library for the Spotify API)</li>
           <li>Lyricsgenius (A python library for the Genius API)</li>
           <li>ChartJS</li>
+          <li>Jquery Flipster</li>
           <li>Google Colab</li>
         </ul>
+        <div id="carousel">
+          <ul class="flip-items">
+            <li>
+              <img src="../static/img/html.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/css.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/js.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/jquery.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/python.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/flask.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/spotify.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/numpy.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/pandas.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/sklearn.png" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/chartjs.svg" height="100" />
+            </li>
+            <li>
+              <img src="../static/img/colab.png" height="100" />
+            </li>
+          </ul>
+        </div>
       </main>
 
       <footer>
@@ -123,22 +169,27 @@
     </div>
 
     <script>
-      function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      }
-
-      async function toggleMobileNavigation() {
+      function toggleMobileNavigation() {
         var element = document.getElementById("mobile-navigation");
         var head = document.getElementById("header");
         if (element.classList.contains("mobile-navigation__open")) {
           element.classList.remove("mobile-navigation__open");
-          await sleep(280);
-          head.style.display = "flex";
         } else {
           element.classList.add("mobile-navigation__open");
-          head.style.display = "none";
         }
       }
+
+      $(document).ready(function () {
+        $("#carousel").flipster({
+          style: "coverflow",
+          spacing: -0.3,
+          start: "center",
+          scrollwheel: true,
+          keyboard: true,
+          touch: true,
+          fadeIn: 600,
+        });
+      });
     </script>
   </body>
 </html>

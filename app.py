@@ -21,6 +21,7 @@ from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import lyricsgenius as lg
+import pylast as pl
 import nltk
 nltk.download('word_tokenize')
 nltk.download('stopwords')
@@ -37,6 +38,18 @@ REDIRECT_URI = "https://piper-ai.herokuapp.com/callback/auth"
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read,user-read-recently-played'
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
+
+LASTFM_API_KEY = os.environ.get('LASTFM_API_KEY')
+LASTFM_API_SECRET = os.environ.get('LASTFM_API_SECRET')
+LASTFM_API_USERNAME = os.environ.get('LASTFM_API_USERNAME')
+LASTFM_API_PASSWORD = pl.md5(os.environ.get('LASTFM_API_PASSWORD'))
+
+network = pl.LastFMNetwork(
+    api_key=LASTFM_API_KEY,
+    api_secret=LASTFM_API_SECRET,
+    username=LASTFM_API_USERNAME,
+    password_hash=LASTFM_API_PASSWORD,
+)
 
 l = WordNetLemmatizer()
 
@@ -56,14 +69,6 @@ dbfile = open('valence', 'rb')
 valence = pickle.load(dbfile)
 dbfile.close()
 
-dbfile = open('arousal', 'rb')
-arousal = pickle.load(dbfile)
-dbfile.close()
-
-dbfile = open('dominance', 'rb')
-dominance = pickle.load(dbfile)
-dbfile.close()
-
 
 @app.route('/')
 def homepage():
@@ -75,9 +80,53 @@ def contact():
     return render_template('contact.html')
 
 
-@app.route('/lyrics')
+@app.route('/lyrics', methods=["POST", "GET"])
 def lyrics():
-    return render_template('lyrics.html')
+    try:
+        song_info = list(request.form.to_dict().values())
+        if len(song_info) == 2 and song_info[0] != '' and song_info[1] != '':
+            token = SpotifyClientCredentials(
+                CLIENT_ID, CLIENT_SECRET)
+            sp = spotipy.Spotify(auth_manager=token)
+            song = request.form['getsong']
+            artist = request.form['getartist']
+            track = sp.search(q='artist:' + artist + ' track:' +
+                              song, type='track', limit=1)
+            if len(track['tracks']['items']) != 0:
+                song = track['tracks']['items'][0]['name']
+                artist = track['tracks']['items'][0]['artists'][0]['name']
+                genius = lg.Genius(GENIUS_KEY)
+                genius_track = genius.search_song(song, artist)
+                if genius_track is not None:
+                    lyrics = [genius_track.lyrics]
+                    cleaned = [(re.sub(r'\d+', '', re.sub("[\(\[].*?[\)\]]", "", line.replace('\n', ' '))).lower().translate(str.maketrans(
+                        string.punctuation, ' '*len(string.punctuation)))).replace('\u2005', ' ') for line in lyrics if not line.startswith('advertisement')]
+                    # Initilising overall mood of given text
+                    mood = [0]*6
+                    emotion_list = ['anger', 'disgust',
+                                    'fear', 'joy', 'sadness', 'surprise']
+                    val = 0
+                    # Counting value of each emotion overall from tokens
+                    count = 0
+                    count1 = 0
+                    for c in cleaned:
+                        for w in c.split():
+                            if w not in stopwords.words('english'):
+                                pos = [l.lemmatize(w, pos="v"), l.lemmatize(w, pos="a"), l.lemmatize(
+                                    w, pos="s"), l.lemmatize(w, pos="r"), l.lemmatize(w, pos="n")]
+                                for p in pos:
+                                    if p in emotions.keys():
+                                        mood[0:6] = [emotions[p][i] + mood[j]
+                                                     for (i, j) in zip([0, 2, 3, 4, 7, 8], range(6))][:]
+                                    if p in valence.keys() and len(valence[p]) == 1:
+                                        val += valence[p][0]
+                                        count += 1
+                                        break
+                    return render_template("lyrics.html", emotion_list=emotion_list, mood=mood, val=[val/count*100, 100-val/count*100], count1=count1)
+        else:
+            return render_template('lyrics.html', emotion_list=[], mood=[], val=[], count1=0)
+    except:
+        return redirect("/auth")
 
 
 @app.route("/auth")
@@ -113,7 +162,6 @@ def login():
 @app.route("/merge", methods=["POST", "GET"])
 def merge():
     playlists = list(request.form.to_dict().values())
-    print(playlists)
     sp = spotipy.Spotify(auth=session['toke'])
     userid = sp.current_user()['id']
     try:
@@ -125,16 +173,10 @@ def merge():
             trackid = []
             count = 0
             for p in playlists[1:]:
-                if p.startswith("https://open.spotify.com/playlist/"):
+                if p.startswith("https://open.spotify.com/playlist/") or p.startswith("https://open.spotify.com/album/"):
                     count += 1
-                    playlist_info = sp.playlist(p[34:56])
-                    tracks = playlist_info['tracks']['items']
-                    while playlist_info['tracks']['next']:
-                        playlist_info['tracks'] = sp.next(
-                            playlist_info['tracks'])
-                        tracks.extend(playlist_info['tracks']['items'])
-                    for i in range(len(tracks)):
-                        trackid.append(tracks[i]['track']['id'])
+                    ids, _ = get_track_ids(p, session)
+                    trackid += ids
             if count >= 2:
                 new_playlist_id = sp.user_playlist_create(
                     userid, playlists[0])['id']
@@ -148,9 +190,68 @@ def merge():
         return redirect('/auth')
 
 
-@app.route("/discover")
+def get_track_ids(inputstr, session):
+    sp = spotipy.Spotify(auth=session['toke'])
+    id = ""
+    input_type = inputstr[25:33]
+    embed = ""
+    if input_type == "playlist":
+        id = inputstr[34:56]
+        embed = "https://open.spotify.com/embed/playlist/" + id
+        playlist_info = sp.playlist(id)
+    else:
+        id = inputstr[31:53]
+        embed = "https://open.spotify.com/embed/album/" + id
+        playlist_info = sp.album(id)
+    tracks = playlist_info['tracks']['items']
+    while playlist_info['tracks']['next']:
+        playlist_info['tracks'] = sp.next(playlist_info['tracks'])
+        tracks.extend(playlist_info['tracks']['items'])
+    trackid = []
+    for i in range(len(tracks)):
+        if input_type == "playlist":
+            trackid.append(tracks[i]['track']['id'])
+        else:
+            trackid.append(tracks[i]['id'])
+    return trackid, embed
+
+
+@app.route("/discover", methods=["POST", "GET"])
 def discover():
-    return render_template("discover.html")
+    try:
+        sp = spotipy.Spotify(auth=session['toke'])
+        userid = sp.current_user()['id']
+        lst = list(request.form.to_dict().values())
+        if len(lst) > 0:
+            song = lst[0]
+            artist = lst[1]
+            track = sp.search(q='artist:' + artist + ' track:' +
+                              song, type='track', limit=1)
+            print(track)
+            if len(track['tracks']['items']) != 0:
+                song = track['tracks']['items'][0]['name']
+                artist = track['tracks']['items'][0]['artists'][0]['name']
+                sim_artists = sp.artist_related_artists(
+                    track['tracks']['items'][0]['artists'][0]['id'])['artists'][0:5]
+                embed = ["https://open.spotify.com/embed/artist/" + s['id']
+                         for s in sim_artists]
+                song = network.get_track(artist, song)
+                similar = [r.strip() for s in song.get_similar(limit=5)
+                           for r in str(s.item).split("-")]
+                ids = [sp.search(q='artist:' + s[0] + ' track:' +
+                                 s[1], type='track', limit=1)['tracks']['items'][0]['id'] for s in similar]
+                new_playlist_id = sp.user_playlist_create(
+                    userid, "Recommended Songs")['id']
+                ids = list(set(ids))
+                for i in range(0, len(ids), 100):
+                    sp.user_playlist_add_tracks(
+                        userid, playlist_id=new_playlist_id, tracks=ids[i:i+100])
+                return render_template("discover.html", embed=embed+["https://open.spotify.com/embed/playlist/"+new_playlist_id])
+            return render_template("discover.html", embed=[])
+        else:
+            return render_template("discover.html", embed=[])
+    except:
+        return redirect("/auth")
 
 
 @app.route("/services")
@@ -177,27 +278,7 @@ def predict():
     sp = spotipy.Spotify(auth_manager=token)
     inputstr = request.form['getplaylist']
     if inputstr.startswith("https://open.spotify.com/playlist/") or inputstr.startswith("https://open.spotify.com/album/"):
-        id = ""
-        input_type = inputstr[25:33]
-        embed = ""
-        if input_type == "playlist":
-            id = inputstr[34:56]
-            embed = "https://open.spotify.com/embed/playlist/" + id
-            playlist_info = sp.playlist(id)
-        else:
-            id = inputstr[31:53]
-            embed = "https://open.spotify.com/embed/album/" + id
-            playlist_info = sp.album(id)
-        tracks = playlist_info['tracks']['items']
-        while playlist_info['tracks']['next']:
-            playlist_info['tracks'] = sp.next(playlist_info['tracks'])
-            tracks.extend(playlist_info['tracks']['items'])
-        trackid = []
-        for i in range(len(tracks)):
-            if input_type == "playlist":
-                trackid.append(tracks[i]['track']['id'])
-            else:
-                trackid.append(tracks[i]['id'])
+        trackid, embed = get_track_ids(inputstr, session)
         features = []
         for i in range(0, len(trackid), 100):
             features += sp.audio_features(trackid[i:i+100])
@@ -208,54 +289,6 @@ def predict():
         return render_template("playlist.html", playlist=embed, tg=tg, tm=tm, emojis=emojis)
     else:
         return render_template('homepage.html', invalid="true")
-
-
-@app.route("/lyrical_analysis", methods=["POST"])
-def lyrical_analysis():
-    token = SpotifyClientCredentials(
-        CLIENT_ID, CLIENT_SECRET)
-    sp = spotipy.Spotify(auth_manager=token)
-    song = request.form['getsong']
-    artist = request.form['getartist']
-    track = sp.search(q='artist:' + artist + ' track:' +
-                      song, type='track', limit=1)
-    if len(track['tracks']['items']) != 0:
-        song = track['tracks']['items'][0]['name']
-        artist = track['tracks']['items'][0]['artists'][0]['name']
-        genius = lg.Genius(GENIUS_KEY)
-        genius_track = genius.search_song(song, artist)
-        if genius_track is not None:
-            lyrics = [genius_track.lyrics]
-            cleaned = [(re.sub(r'\d+', '', re.sub("[\(\[].*?[\)\]]", "", line.replace('\n', ' '))).lower().translate(str.maketrans(
-                string.punctuation, ' '*len(string.punctuation)))).replace('\u2005', ' ') for line in lyrics if not line.startswith('advertisement')]
-
-            # Initilising overall mood of given text
-            mood = [0]*9
-            emotion_list = ['anger', 'disgust',
-                            'fear', 'joy', 'sadness', 'surprise']
-
-            # Counting value of each emotion overall from tokens
-            count = 0
-            count1 = 0
-            for c in cleaned:
-                for w in c.split():
-                    if w not in stopwords.words('english'):
-                        pos = [l.lemmatize(w, pos="v"), l.lemmatize(w, pos="a"), l.lemmatize(
-                            w, pos="s"), l.lemmatize(w, pos="r"), l.lemmatize(w, pos="n")]
-                        for p in pos:
-                            if p in emotions.keys():
-                                mood[0:6] = [emotions[p][i] + mood[j]
-                                             for (i, j) in zip([0, 2, 3, 4, 7, 8], range(6))][:]
-                                count1 += 1
-                            if p in valence.keys() and len(valence[p]) == 1:
-                                mood[6] += valence[p][0]
-                                mood[7] += arousal[p][0]
-                                mood[8] += dominance[p][0]
-                                count += 1
-                                break
-
-            print(mood, count, count1)
-    return render_template("lyrics.html")
 
 
 def get_chart_data(genre, mood):

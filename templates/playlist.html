@@ -135,10 +135,8 @@
           drawCharts(tgl,tgd,"Genre Chart","genre_chart",genre_color);
           drawCharts(tml, tmd, "Mood Chart", "mood_chart", mood_color);
           await sleep(200);
-          head.style.display = 'flex';
         } else {
           element.classList.add("mobile-navigation__open");
-          head.style.display = 'none';
         }
       }
 
@@ -148,7 +146,6 @@
 
         const options = {
           responsive: true,
-          animation: 300,
           maintainAspectRatio: false,
           title: {
             display: true,

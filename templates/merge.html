@@ -51,7 +51,7 @@
         }
         $(".add").click(function () {
           $(".dummy input").attr("name", "playlist-" + (3 + fieldNum));
-          $(".dummy label").text("Playlist " + (3 + fieldNum));
+          $(".dummy label").text("Album/Playlist " + (3 + fieldNum));
           $(".dummy > p").css("background-color", (color[(3+fieldNum)%4]));
           $(".dummy > p").clone(true).insertBefore(".add-button");
           fieldNum++;
@@ -108,7 +108,7 @@
       <main class="merge--main">
         <div class="dummy" style="display: none">
           <p class="merge-playlist">
-            <label>Playlist 1</label><br />
+            <label>Album/Playlist 1</label><br />
             <input type="text" name="playlist-1" autocomplete="off" />
             <span class="remove"><i class="fa fa-close"></i></span>
           </p>
@@ -137,11 +137,11 @@
               <input type="text" name="new-playlist-name" autocomplete="off" />
             </p>
             <p class="merge-playlist" style="background-color: #bd575f">
-              <label>Playlist 1</label><br />
+              <label>Album/Playlist 1</label><br />
               <input type="text" name="playlist-1" autocomplete="off" />
             </p>
             <p class="merge-playlist" style="background-color: #8c75af">
-              <label>Playlist 2</label><br />
+              <label>Album/Playlist 2</label><br />
               <input type="text" name="playlist-2" autocomplete="off" />
             </p>
             <p class="add-button">
@@ -185,10 +185,8 @@
         if (element.classList.contains("mobile-navigation__open")) {
           element.classList.remove("mobile-navigation__open");
           await sleep(280);
-          head.style.display = "flex";
         } else {
           element.classList.add("mobile-navigation__open");
-          head.style.display = "none";
         }
       }
     </script>
