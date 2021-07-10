@@ -23,9 +23,7 @@ import pandas as pd
 import lyricsgenius as lg
 import pylast as pl
 import nltk
-nltk.download('word_tokenize')
 nltk.download('stopwords')
-nltk.download('WordNetLemmatizer')
 
 app = Flask(__name__)
 
@@ -78,6 +76,11 @@ def homepage():
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
+
+@app.route('/about-me')
+def about():
+    return render_template('about-me.html')
 
 
 @app.route('/lyrics', methods=["POST", "GET"])

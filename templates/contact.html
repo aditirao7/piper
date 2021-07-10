@@ -73,7 +73,7 @@
       </header>
 
       <main>
-        <p style="font-size: 20px; margin-top: 50px">
+        <p style="font-size: 19px; margin-top: 50px">
           Piper uses Machine Learning to classify songs into different genres
           and predict the mood of the song. The datasets for training the models
           were obtained using the Spotify API. The machine learning models
@@ -87,23 +87,13 @@
           you can choose to analyse your tracks, merge multiple playlists and/or
           albums and get a curated playlist of recommended songs.
         </p>
-        <p style="color: #7499f1; font-size: 20px">
+        <p style="color: #7499f1; font-size: 20px; margin-bottom: 5px">
           Piper was built using the following languages, packages, frameworks
           and APIs:
         </p>
-        <ul>
-          <li>Spotify API</li>
-          <li>Genius API</li>
-          <li>HTML, CSS, JavaScript, JQuery, Python</li>
-          <li>Flask</li>
-          <li>NLTK</li>
-          <li>Numpy, Pandas and Scikit Learn</li>
-          <li>Spotipy (A python library for the Spotify API)</li>
-          <li>Lyricsgenius (A python library for the Genius API)</li>
-          <li>ChartJS</li>
-          <li>Jquery Flipster</li>
-          <li>Google Colab</li>
-        </ul>
+        <p style="margin-top: 5px">
+          NLTK, Spotipy, Lyricsgenius, JQuery Flipster and
+        </p>
         <div id="carousel">
           <ul class="flip-items">
             <li>
@@ -147,6 +137,35 @@
             </li>
           </ul>
         </div>
+        <div class="container">
+          <form action="action_page.php">
+            <label for="fname">First Name</label>
+            <input
+              type="text"
+              id="fname"
+              name="firstname"
+              placeholder="Your name.."
+            />
+
+            <label for="lname">Last Name</label>
+            <input
+              type="text"
+              id="lname"
+              name="lastname"
+              placeholder="Your last name.."
+            />
+
+            <label for="subject">Subject</label>
+            <textarea
+              id="subject"
+              name="subject"
+              placeholder="Write something.."
+              style="height: 200px"
+            ></textarea>
+
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
       </main>
 
       <footer>
@@ -167,7 +186,7 @@
           </a>
         </div>
 
-        <span>Aditi Rao</span>
+        <a href="{{ url_for('about')}}">Aditi Rao</a>
       </footer>
     </div>
 

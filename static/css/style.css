@@ -207,8 +207,9 @@ footer {
   color: #f89746;
 }
 
-footer span {
+footer > a {
   color: #f89746;
+  text-decoration: none;
 }
 
 .services--main {
