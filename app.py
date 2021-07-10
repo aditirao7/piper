@@ -24,6 +24,7 @@ import lyricsgenius as lg
 import pylast as pl
 import nltk
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 app = Flask(__name__)
 
