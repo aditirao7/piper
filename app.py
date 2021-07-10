@@ -2,7 +2,6 @@ import string
 import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 import json
 import os
 from flask import Flask, flash, render_template, redirect, request, session, make_response, session, redirect
