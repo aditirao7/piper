@@ -175,7 +175,7 @@ def merge():
             for p in playlists[1:]:
                 if p.startswith("https://open.spotify.com/playlist/") or p.startswith("https://open.spotify.com/album/"):
                     count += 1
-                    ids, _ = get_track_ids(p, session)
+                    ids, _ = get_track_ids(p, session, sp)
                     trackid += ids
             if count >= 2:
                 new_playlist_id = sp.user_playlist_create(
@@ -190,8 +190,7 @@ def merge():
         return redirect('/auth')
 
 
-def get_track_ids(inputstr, session):
-    sp = spotipy.Spotify(auth=session['toke'])
+def get_track_ids(inputstr, session, sp):
     id = ""
     input_type = inputstr[25:33]
     embed = ""
@@ -278,7 +277,7 @@ def predict():
     sp = spotipy.Spotify(auth_manager=token)
     inputstr = request.form['getplaylist']
     if inputstr.startswith("https://open.spotify.com/playlist/") or inputstr.startswith("https://open.spotify.com/album/"):
-        trackid, embed = get_track_ids(inputstr, session)
+        trackid, embed = get_track_ids(inputstr, session, sp)
         features = []
         for i in range(0, len(trackid), 100):
             features += sp.audio_features(trackid[i:i+100])

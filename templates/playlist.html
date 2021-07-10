@@ -123,11 +123,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      async function toggleMobileNavigation() {
+      function toggleMobileNavigation() {
         var element = document.getElementById("mobile-navigation");
         var head = document.getElementById("header");
         if (element.classList.contains("mobile-navigation__open")) {

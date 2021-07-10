@@ -136,11 +136,7 @@
     </div>
 
     <script>
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      async function toggleMobileNavigation() {
+      function toggleMobileNavigation() {
         var element = document.getElementById("mobile-navigation");
         var head = document.getElementById("header");
         if (element.classList.contains("mobile-navigation__open")) {
@@ -167,7 +163,6 @@
             "recent_mood_chart",
             mood_color
           );
-          await sleep(280);
         } else {
           element.classList.add("mobile-navigation__open");
         }
@@ -181,7 +176,6 @@
 
         const options = {
           responsive: true,
-          animation: {duration: 1500},
           maintainAspectRatio: false,
           title: {
             display: true,
