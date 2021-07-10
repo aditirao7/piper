@@ -79,11 +79,6 @@ def contact():
     return render_template('contact.html')
 
 
-@app.route('/about-me')
-def about():
-    return render_template('about-me.html')
-
-
 @app.route('/lyrics', methods=["POST", "GET"])
 def lyrics():
     song_info = list(request.form.to_dict().values())
