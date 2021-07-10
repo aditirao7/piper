@@ -85,51 +85,48 @@ def about():
 
 @app.route('/lyrics', methods=["POST", "GET"])
 def lyrics():
-    try:
-        song_info = list(request.form.to_dict().values())
-        if len(song_info) == 2 and song_info[0] != '' and song_info[1] != '':
-            token = SpotifyClientCredentials(
-                CLIENT_ID, CLIENT_SECRET)
-            sp = spotipy.Spotify(auth_manager=token)
-            song = request.form['getsong']
-            artist = request.form['getartist']
-            track = sp.search(q='artist:' + artist + ' track:' +
-                              song, type='track', limit=1)
-            if len(track['tracks']['items']) != 0:
-                song = track['tracks']['items'][0]['name']
-                artist = track['tracks']['items'][0]['artists'][0]['name']
-                genius = lg.Genius(GENIUS_KEY)
-                genius_track = genius.search_song(song, artist)
-                if genius_track is not None:
-                    lyrics = [genius_track.lyrics]
-                    cleaned = [(re.sub(r'\d+', '', re.sub("[\(\[].*?[\)\]]", "", line.replace('\n', ' '))).lower().translate(str.maketrans(
-                        string.punctuation, ' '*len(string.punctuation)))).replace('\u2005', ' ') for line in lyrics if not line.startswith('advertisement')]
-                    # Initilising overall mood of given text
-                    mood = [0]*6
-                    emotion_list = ['anger', 'disgust',
-                                    'fear', 'joy', 'sadness', 'surprise']
-                    val = 0
-                    # Counting value of each emotion overall from tokens
-                    count = 0
-                    count1 = 0
-                    for c in cleaned:
-                        for w in c.split():
-                            if w not in stopwords.words('english'):
-                                pos = [l.lemmatize(w, pos="v"), l.lemmatize(w, pos="a"), l.lemmatize(
-                                    w, pos="s"), l.lemmatize(w, pos="r"), l.lemmatize(w, pos="n")]
-                                for p in pos:
-                                    if p in emotions.keys():
-                                        mood[0:6] = [emotions[p][i] + mood[j]
-                                                     for (i, j) in zip([0, 2, 3, 4, 7, 8], range(6))][:]
-                                    if p in valence.keys() and len(valence[p]) == 1:
-                                        val += valence[p][0]
-                                        count += 1
-                                        break
-                    return render_template("lyrics.html", emotion_list=emotion_list, mood=mood, val=[val/count*100, 100-val/count*100], count1=count1)
-        else:
-            return render_template('lyrics.html', emotion_list=[], mood=[], val=[], count1=0)
-    except:
-        return redirect("/auth")
+    song_info = list(request.form.to_dict().values())
+    if len(song_info) == 2 and song_info[0] != '' and song_info[1] != '':
+        token = SpotifyClientCredentials(
+            CLIENT_ID, CLIENT_SECRET)
+        sp = spotipy.Spotify(auth_manager=token)
+        song = request.form['getsong']
+        artist = request.form['getartist']
+        track = sp.search(q='artist:' + artist + ' track:' +
+                          song, type='track', limit=1)
+        if len(track['tracks']['items']) != 0:
+            song = track['tracks']['items'][0]['name']
+            artist = track['tracks']['items'][0]['artists'][0]['name']
+            genius = lg.Genius(GENIUS_KEY)
+            genius_track = genius.search_song(song, artist)
+            if genius_track is not None:
+                lyrics = [genius_track.lyrics]
+                cleaned = [(re.sub(r'\d+', '', re.sub("[\(\[].*?[\)\]]", "", line.replace('\n', ' '))).lower().translate(str.maketrans(
+                    string.punctuation, ' '*len(string.punctuation)))).replace('\u2005', ' ') for line in lyrics if not line.startswith('advertisement')]
+                # Initilising overall mood of given text
+                mood = [0]*6
+                emotion_list = ['anger', 'disgust',
+                                'fear', 'joy', 'sadness', 'surprise']
+                val = 0
+                # Counting value of each emotion overall from tokens
+                count = 0
+                count1 = 0
+                for c in cleaned:
+                    for w in c.split():
+                        if w not in stopwords.words('english'):
+                            pos = [l.lemmatize(w, pos="v"), l.lemmatize(w, pos="a"), l.lemmatize(
+                                w, pos="s"), l.lemmatize(w, pos="r"), l.lemmatize(w, pos="n")]
+                            for p in pos:
+                                if p in emotions.keys():
+                                    mood[0:6] = [emotions[p][i] + mood[j]
+                                                 for (i, j) in zip([0, 2, 3, 4, 7, 8], range(6))][:]
+                                if p in valence.keys() and len(valence[p]) == 1:
+                                    val += valence[p][0]
+                                    count += 1
+                                    break
+                return render_template("lyrics.html", emotion_list=emotion_list, mood=mood, val=[val/count*100, 100-val/count*100], count1=count1)
+    else:
+        return render_template('lyrics.html', emotion_list=[], mood=[], val=[], count1=0)
 
 
 @app.route("/auth")
