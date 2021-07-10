@@ -72,28 +72,32 @@
         <a class="navigation--button" href="{{ url_for('auth')}}">Login</a>
       </header>
 
-      <main>
-        <p style="font-size: 19px; margin-top: 50px">
-          Piper uses Machine Learning to classify songs into different genres
-          and predict the mood of the song. The datasets for training the models
-          were obtained using the Spotify API. The machine learning models
-          however, are not completely accurate and may classify some songs
-          wrong. Lyrical Analysis is done by cleaning the lyrics using the NLTK
-          library and conducting an analysis on the words using the
-          <a href="https://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm"
-            >NRC Emotion Lexicon</a
-          >
-          to extract the overall valence and emotion of the song. After login
-          you can choose to analyse your tracks, merge multiple playlists and/or
-          albums and get a curated playlist of recommended songs.
-        </p>
-        <p style="color: #7499f1; font-size: 20px; margin-bottom: 5px">
-          Piper was built using the following languages, packages, frameworks
-          and APIs:
-        </p>
-        <p style="margin-top: 5px">
-          NLTK, Spotipy, Lyricsgenius, JQuery Flipster and
-        </p>
+      <main class="contact--main">
+        <div>
+          <p style="font-size: 19px; margin-top: 50px">
+            Piper uses Machine Learning to classify songs into different genres
+            and predict the mood of the song. The datasets for training the
+            models were obtained using the Spotify API. The machine learning
+            models however, are not completely accurate and may classify some
+            songs wrong. Lyrical Analysis is done by cleaning the lyrics using
+            the NLTK library and conducting an analysis on the words using the
+            <a href="https://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm"
+              >NRC Emotion Lexicon</a
+            >
+            to extract the overall valence and emotion of the song. After login
+            you can choose to analyse your tracks, merge multiple playlists
+            and/or albums and get a curated playlist of recommended songs.
+          </p>
+        </div>
+        <div>
+          <p style="color: #7499f1; font-size: 20px; margin-bottom: 5px">
+            Piper was built using the following languages, packages, frameworks
+            and APIs:
+          </p>
+          <p style="margin-top: 5px">
+            NLTK, Spotipy, Lyricsgenius, JQuery Flipster and
+          </p>
+        </div>
         <div id="carousel">
           <ul class="flip-items">
             <li>

@@ -222,7 +222,6 @@ def discover():
             artist = lst[1]
             track = sp.search(q='artist:' + artist + ' track:' +
                               song, type='track', limit=1)
-            print(track)
             if len(track['tracks']['items']) != 0:
                 song = track['tracks']['items'][0]['name']
                 artist = track['tracks']['items'][0]['artists'][0]['name']
@@ -230,11 +229,13 @@ def discover():
                     track['tracks']['items'][0]['artists'][0]['id'])['artists'][0:5]
                 embed = ["https://open.spotify.com/embed/artist/" + s['id']
                          for s in sim_artists]
+                ids = [t['id'] for s in sim_artists for t in sp.artist_top_tracks(
+                    s['id'])['tracks'][0:2]]
                 song = network.get_track(artist, song)
                 similar = [r.strip() for s in song.get_similar(limit=5)
                            for r in str(s.item).split("-")]
-                ids = [sp.search(q='artist:' + s[0] + ' track:' +
-                                 s[1], type='track', limit=1)['tracks']['items'][0]['id'] for s in similar]
+                ids = ids + [sp.search(q='artist:' + s[0] + ' track:' +
+                                       s[1], type='track', limit=1)['tracks']['items'][0]['id'] for s in similar]
                 new_playlist_id = sp.user_playlist_create(
                     userid, "Recommended Songs")['id']
                 ids = list(set(ids))
@@ -336,7 +337,8 @@ def clean_features(full_features):
                 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms']
     clean_features = []
     for i in range(len(full_features)):
-        clean_features.append([full_features[i][j] for j in features])
+        if full_features[i] is not None:
+            clean_features.append([full_features[i][j] for j in features])
     return clean_features
 
 

@@ -751,6 +751,12 @@ textarea {
   padding: 20px;
 }
 
+.contact--main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 @media only screen and (max-width: 680px) {
   main {
     display: flex;
