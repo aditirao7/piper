@@ -21,6 +21,7 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import lyricsgenius as lg
 import pylast as pl
+import subprocess
 import nltk
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -73,7 +74,7 @@ def homepage():
     return render_template('homepage.html', invalid="false")
 
 
-@app.route('/contact')
+@app.route('/contact', methods=["POST", "GET"])
 def contact():
     return render_template('contact.html')
 
