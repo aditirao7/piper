@@ -80,6 +80,16 @@ app.config.update(dict(
 ))
 mail = Mail(app)
 
+regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+
+
+def check(email):
+
+    if(re.search(regex, email)):
+        return 1
+    else:
+        return 0
+
 
 @app.route('/')
 def homepage():
@@ -94,7 +104,7 @@ def contact():
         form = list(request.form.to_dict().values())
         if(form[0] == '' or form[1] == '' or form[2] == '' or form[3] == ''):
             return render_template('contact.html', sent="Please enter valid data in every field!")
-        if(not form[1].endswith('@gmail.com')):
+        if(not check(form[1])):
             return render_template('contact.html', sent="Please enter a valid email ID!")
         msg = Message(form[0] + ' - ' + form[2], sender=form[1],
                       recipients=[os.environ.get('MY_EMAIL')])
