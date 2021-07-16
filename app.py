@@ -96,9 +96,9 @@ def contact():
             return render_template('contact.html', sent="Please enter valid data in every field!")
         if(not form[1].endswith('@gmail.com')):
             return render_template('contact.html', sent="Please enter a valid email ID!")
-        msg = Message('PIPER CONTACT FORM: ' + form[0] + ' - ' + form[2], sender=form[1],
+        msg = Message(form[0] + ' - ' + form[2], sender=form[1],
                       recipients=[os.environ.get('MY_EMAIL')])
-        msg.body = 'From: '+form[1]+'\n\n'+form[3]
+        msg.body = 'From: '+form[1]+'\n'+form[3]
         mail.send(msg)
         return render_template('contact.html', sent="Success!")
 
