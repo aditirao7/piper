@@ -796,6 +796,11 @@ textarea:focus {
   color: #ed7d2a;
 }
 
+.success,
+.error {
+  margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 680px) {
   main {
     display: flex;
@@ -1067,5 +1072,15 @@ textarea:focus {
   .services-link {
     background-color: #f47556;
     margin-top: 50px;
+  }
+
+  .success {
+    margin-top: 20px;
+    width: 40%;
+  }
+
+  .error {
+    margin-top: 20px;
+    width: 90%;
   }
 }

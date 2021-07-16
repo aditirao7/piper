@@ -74,7 +74,7 @@ app.config.update(dict(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
-    MAIL_USE_SSL=True,
+    MAIL_USE_SSL=False,
     MAIL_USERNAME=os.environ.get('MY_EMAIL'),
     MAIL_PASSWORD=os.environ.get('MY_EMAIL_PASSWORD'),
 ))
