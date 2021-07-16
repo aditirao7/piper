@@ -10,3 +10,4 @@ dill==0.3.4
 nltk==3.6.2
 lyricsgenius==3.0.1
 pylast==4.2.1
+flask_mail==0.9.1
