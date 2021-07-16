@@ -22,6 +22,7 @@ import pandas as pd
 import lyricsgenius as lg
 import pylast as pl
 import subprocess
+from flask_mail import Mail, Message
 import nltk
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -68,6 +69,16 @@ dbfile = open('valence', 'rb')
 valence = pickle.load(dbfile)
 dbfile.close()
 
+app.config.update(dict(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USE_SSL=False,
+    MAIL_USERNAME=os.environ.get('MY_EMAIL'),
+    MAIL_PASSWORD=os.environ.get('MY_EMAIL_PASSWORD'),
+))
+mail = Mail(app)
+
 
 @app.route('/')
 def homepage():
@@ -76,7 +87,20 @@ def homepage():
 
 @app.route('/contact', methods=["POST", "GET"])
 def contact():
-    return render_template('contact.html')
+    if request.method == 'GET':
+        return render_template('contact.html', sent="true")
+    else:
+        form = list(request.form.to_dict().values())
+        print(form)
+        if(form[0] == '' or form[1] == '' or form[2] == '' or form[3] == ''):
+            return render_template('contact.html', sent="Please enter valid data in every field!")
+        if(not form[1].endswith('.gmail.com')):
+            return render_template('contact.html', sent="Please enter a valid email ID!")
+        msg = Message(form[0] + ' - ' + form[2], sender=form[1],
+                      recipients=[os.environ.get('MY_EMAIL')])
+        msg.body = form[3]
+        mail.send(msg)
+        return render_template('contact.html', sent="Success!")
 
 
 @app.route('/lyrics', methods=["POST", "GET"])

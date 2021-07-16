@@ -28,7 +28,27 @@
     <title>About.</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="../static/css/jquery.flipster.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="../static/js/jquery.flipster.min.js"></script>
+    <script>
+      $(function () {
+        var inv = {{sent|tojson}};
+        if(inv.localeCompare('true')!=0) {
+            $("#message span").text(inv);
+            if(inv.localeCompare('Success!')==0)
+            {
+                $("#message i").attr("class", "fa fa-check");
+                $("#message").attr("class", "success");
+            }
+            else
+            {
+                $("#message i").attr("class", "fa fa-times-circle");
+                $("#message").attr("class", "error");
+            }
+            $("#message").attr("style", "display:block");
+        }
+      });
+    </script>
   </head>
   <body>
     <div class="mobile-navigation" id="mobile-navigation">
@@ -74,6 +94,7 @@
 
       <main class="contact--main">
         <div>
+          <h1 id="contact-headline" class="introline">About Piper</h1>
           <p style="font-size: 19px; margin-top: 50px">
             Piper uses Machine Learning to classify songs into different genres
             and predict the mood of the song. The datasets for training the
@@ -141,6 +162,50 @@
             </li>
           </ul>
         </div>
+        <div id="message" style="display: none">
+          <i class="fa fa-check"></i>
+          <span>Message</span>
+        </div>
+        <form
+          class="contact-form"
+          method="POST"
+          action="{{url_for('contact')}}"
+        >
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Your name.."
+          /><br />
+
+          <label for="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Your Email ID.."
+          /><br />
+
+          <label for="subject">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            placeholder="Email Subject.."
+          /><br />
+
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Write something.."
+            style="height: 200px"
+          ></textarea
+          ><br />
+
+          <input type="submit" value="Submit" />
+        </form>
       </main>
 
       <footer>
