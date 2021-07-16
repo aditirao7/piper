@@ -99,6 +99,7 @@ def contact():
         msg = Message(form[0] + ' - ' + form[2], sender=form[1],
                       recipients=[os.environ.get('MY_EMAIL')])
         msg.body = form[3]
+        print(os.environ.get('MY_EMAIL'))
         mail.send(msg)
         return render_template('contact.html', sent="Success!")
 
