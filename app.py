@@ -74,7 +74,7 @@ app.config.update(dict(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
-    MAIL_USE_SSL=False,
+    MAIL_USE_SSL=True,
     MAIL_USERNAME=os.environ.get('MY_EMAIL'),
     MAIL_PASSWORD=os.environ.get('MY_EMAIL_PASSWORD'),
 ))
@@ -96,10 +96,9 @@ def contact():
             return render_template('contact.html', sent="Please enter valid data in every field!")
         if(not form[1].endswith('@gmail.com')):
             return render_template('contact.html', sent="Please enter a valid email ID!")
-        msg = Message(form[0] + ' - ' + form[2], sender=form[1],
+        msg = Message('PIPER CONTACT FORM: ' + form[0] + ' - ' + form[2], sender=form[1],
                       recipients=[os.environ.get('MY_EMAIL')])
-        msg.body = form[3]
-        print(os.environ.get('MY_EMAIL'))
+        msg.body = 'From: '+form[1]+'\n\n'+form[3]
         mail.send(msg)
         return render_template('contact.html', sent="Success!")
 

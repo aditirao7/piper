@@ -109,7 +109,7 @@
       <main class="contact--main">
         <div>
           <h1 id="contact-headline" class="introline">About Piper</h1>
-          <p style="font-size: 19px; margin-top: 50px">
+          <p class="info" style="font-size: 19px; margin-top: 50px">
             Piper uses Machine Learning to classify songs into different genres
             and predict the mood of the song. The datasets for training the
             models were obtained using the Spotify API. The machine learning
@@ -185,6 +185,7 @@
           method="POST"
           action="{{url_for('contact')}}"
         >
+          <h1 class="form-headline">Contact Us</h1>
           <label for="name">Name</label>
           <input
             type="text"
@@ -198,6 +199,8 @@
             type="text"
             id="email"
             name="email"
+            autocomplete="off"
+            ,
             placeholder="Your Email ID.."
           /><br />
 
@@ -216,7 +219,7 @@
             id="message"
             name="message"
             placeholder="Write something.."
-            style="height: 200px"
+            style="height: 100px"
           ></textarea
           ><br />
 
