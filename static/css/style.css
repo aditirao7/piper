@@ -875,7 +875,7 @@ textarea {
     position: fixed;
     background-color: #333;
     align-items: center;
-    z-index: 0;
+    z-index: 1;
   }
 
   .navigation--button,
@@ -984,7 +984,7 @@ textarea {
 
   .mobile-navigation {
     display: block;
-    z-index: 1;
+    z-index: 2;
   }
 
   .menu--button {

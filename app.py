@@ -70,6 +70,7 @@ valence = pickle.load(dbfile)
 dbfile.close()
 
 app.config.update(dict(
+    DEBUG=True,
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
@@ -91,7 +92,6 @@ def contact():
         return render_template('contact.html', sent="true")
     else:
         form = list(request.form.to_dict().values())
-        print(form)
         if(form[0] == '' or form[1] == '' or form[2] == '' or form[3] == ''):
             return render_template('contact.html', sent="Please enter valid data in every field!")
         if(not form[1].endswith('@gmail.com')):
