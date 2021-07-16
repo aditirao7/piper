@@ -28,7 +28,6 @@
     <title>About.</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="../static/css/jquery.flipster.min.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="../static/js/jquery.flipster.min.js"></script>
     <script>
       $(function () {
@@ -45,6 +44,21 @@
                 $("#message i").attr("class", "fa fa-times-circle");
                 $("#message").attr("class", "error");
             }
+            $("#message").attr("style", "display:block");
+        }
+      });
+    </script>
+    <script>
+      $(function () {
+        var inv = {{sent|tojson}};
+        if(inv.localeCompare('true')!=0) {
+            $("#message span").text(inv);
+            if(inv.localeCompare('Success!')==0)
+            {
+                $("#message i").attr("class", "fa fa-check");
+                $("#message").attr("class", "success");
+            }
+
             $("#message").attr("style", "display:block");
         }
       });
@@ -192,6 +206,8 @@
             type="text"
             id="subject"
             name="subject"
+            autocomplete="off"
+            ,
             placeholder="Email Subject.."
           /><br />
 
