@@ -94,7 +94,7 @@ def contact():
         print(form)
         if(form[0] == '' or form[1] == '' or form[2] == '' or form[3] == ''):
             return render_template('contact.html', sent="Please enter valid data in every field!")
-        if(not form[1].endswith('.gmail.com')):
+        if(not form[1].endswith('@gmail.com')):
             return render_template('contact.html', sent="Please enter a valid email ID!")
         msg = Message(form[0] + ' - ' + form[2], sender=form[1],
                       recipients=[os.environ.get('MY_EMAIL')])
