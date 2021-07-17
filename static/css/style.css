@@ -748,7 +748,7 @@ textarea:focus {
 }
 
 .contact-form input[type="submit"]:hover {
-  background-color: #446eb7;
+  background-color: #7499f1;
 }
 
 .contact-form {
@@ -1081,6 +1081,6 @@ textarea:focus {
 
   .error {
     margin-top: 20px;
-    width: 90%;
+    width: 100%;
   }
 }
