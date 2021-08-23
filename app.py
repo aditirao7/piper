@@ -24,8 +24,6 @@ import pylast as pl
 import subprocess
 from flask_mail import Mail, Message
 import nltk
-nltk.download('stopwords')
-nltk.download('wordnet')
 
 app = Flask(__name__)
 
