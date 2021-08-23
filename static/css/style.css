@@ -190,8 +190,10 @@ footer {
   margin-top: 20px;
 }
 
-.socials {
+.social {
   margin-right: 40px;
+  display: block;
+  margin-left: 20px;
 }
 
 .socials--item {
