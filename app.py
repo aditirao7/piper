@@ -51,6 +51,8 @@ network = pl.LastFMNetwork(
 
 l = WordNetLemmatizer()
 
+nltk.download('stopwords')
+
 with open('genre.pkl', 'rb') as g:
     genre_data = joblib.load(g)
 genre_model = genre_data["model"]
