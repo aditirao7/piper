@@ -52,6 +52,7 @@ network = pl.LastFMNetwork(
 l = WordNetLemmatizer()
 
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 with open('genre.pkl', 'rb') as g:
     genre_data = joblib.load(g)
