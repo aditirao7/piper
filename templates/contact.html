@@ -29,26 +29,6 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="../static/css/jquery.flipster.min.css" />
     <script src="../static/js/jquery.flipster.min.js"></script>
-    <script>
-      $(function () {
-        var inv = {{sent|tojson}};
-        if(inv.localeCompare('true')!=0) {
-            $("#message span").text(inv);
-            if(inv.localeCompare('Success!')==0)
-            {
-                $("#message i").attr("class", "fa fa-check");
-                $("#message").attr("class", "success");
-            }
-            else
-            {
-                $("#message i").attr("class", "fa fa-times-circle");
-                $("#message").attr("class", "error");
-            }
-            $("#message").attr("style", "display:block");
-            $("#message").attr("style", "margin-left:0px");
-        }
-      });
-    </script>
   </head>
   <body>
     <div class="mobile-navigation" id="mobile-navigation">
@@ -166,51 +146,6 @@
           <i class="fa fa-check"></i>
           <span>Message</span>
         </div>
-        <form
-          class="contact-form"
-          method="POST"
-          action="{{url_for('contact')}}"
-        >
-          <h1 class="form-headline">Contact Us</h1>
-          <label for="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Your name.."
-          /><br />
-
-          <label for="email">Email</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            autocomplete="off"
-            ,
-            placeholder="Your Email ID.."
-          /><br />
-
-          <label for="subject">Subject</label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            autocomplete="off"
-            ,
-            placeholder="Email Subject.."
-          /><br />
-
-          <label for="message">Message</label>
-          <textarea
-            id="message"
-            name="message"
-            placeholder="Write something.."
-            style="height: 100px"
-          ></textarea
-          ><br />
-
-          <input type="submit" value="Submit" />
-        </form>
       </main>
 
       <footer>
